@@ -51,6 +51,31 @@ def kernel(E_rec, E_true):
     return np.exp(-0.5 * ((E_rec[None, :] - E_true[:, None]) / s) ** 2) / (np.sqrt(2 * np.pi) * s)
 
 
+def figura_sigma():
+    """Figura con due pannelli: sigma(E) e sigma/E in funzione dell'energia vera."""
+    E = np.linspace(E_MIN, E_MAX, 500)
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3), constrained_layout=True)
+
+    ax1.plot(E, 1000 * sigma(E), color="tab:green", lw=1.5)
+    ax1.set_xlabel(r"$E_{true}$ [MeV]")
+    ax1.set_ylabel(r"$\sigma$ [keV]")
+    ax1.set_title("Larghezza della gaussiana", fontsize=10)
+
+    ax2.plot(E, 100 * sigma(E) / E, color="tab:purple", lw=1.5)
+    ax2.set_xlabel(r"$E_{true}$ [MeV]")
+    ax2.set_ylabel(r"$\sigma/E_{true}$ [%]")
+    ax2.set_title("Risoluzione relativa", fontsize=10)
+
+    for ax in (ax1, ax2):
+        ax.set_xlim(E_MIN, E_MAX)
+        ax.set_ylim(bottom=0)
+        ax.grid(alpha=0.3)
+
+    for out in ("risoluzione_sigma.png", "risoluzione_sigma.pdf"):
+        fig.savefig(out, dpi=150, bbox_inches="tight")
+        print(f"Figura salvata in {out}")
+
+
 def main():
     E_true = np.linspace(E_MIN, E_MAX, 3000)
     E_rec = np.linspace(REC_MIN, REC_MAX, 4000)   # passo ~2.5 keV < sigma minima
@@ -115,6 +140,8 @@ def main():
     for out in ("risoluzione.png", "risoluzione.pdf"):
         fig.savefig(out, dpi=150, bbox_inches="tight")
         print(f"Figura salvata in {out}")
+
+    figura_sigma()
 
 
 if __name__ == "__main__":

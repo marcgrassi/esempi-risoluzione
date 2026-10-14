@@ -30,7 +30,7 @@ nell'intervallo $1~\mathrm{MeV} \le \Et \le 10~\mathrm{MeV}$:
 \end{equation}
 La risoluzione è descritta da un kernel gaussiano centrato sull'energia vera, la cui
 larghezza cresce linearmente con $\Et$, da $5~\mathrm{keV}$ a $1~\mathrm{MeV}$ a
-$300~\mathrm{keV}$ a $10~\mathrm{MeV}$:
+$300~\mathrm{keV}$ a $10~\mathrm{MeV}$ (figura~\ref{fig:sigma}):
 \begin{equation}
   p(\Er \,|\, \Et) = \frac{1}{\sqrt{2\pi}\,\sigma(\Et)}
   \exp\!\left[-\frac{(\Er-\Et)^2}{2\,\sigma^2(\Et)}\right].
@@ -40,26 +40,29 @@ Lo spettro ricostruito si ottiene con l'integrale di convoluzione a kernel varia
   \frac{dN}{d\Er} = \int_{1\,\mathrm{MeV}}^{10\,\mathrm{MeV}}
   \frac{dN}{d\Et}\; p(\Er \,|\, \Et)\; d\Et ,
 \end{equation}
-che nella figura è calcolato numericamente. Se $\sigma$ varia lentamente rispetto a $P$,
-e lontano dai bordi dell'intervallo, l'integrale si risolve analiticamente:
-\begin{equation}
-  \frac{dN}{d\Er} \simeq 1 + A\, e^{-2\pi^2\sigma^2(\Er)/P^2}
-  \sin\!\left(\frac{2\pi \Er}{P}\right).
-\end{equation}
-La risoluzione \emph{non modifica il periodo} dell'oscillazione: ne riduce l'ampiezza di
-un fattore $e^{-2\pi^2\sigma^2/P^2}$, pari a circa $1$ a $1~\mathrm{MeV}$ e a circa $0.17$
-a $10~\mathrm{MeV}$. L'oscillazione si cancella quando $\sigma$ diventa confrontabile con
-$P/2\pi$ o maggiore.
+che nella figura~\ref{fig:spettri} è calcolato numericamente. La risoluzione \emph{non
+modifica il periodo} dell'oscillazione, ma ne riduce l'ampiezza, tanto più quanto più
+$\sigma$ è grande rispetto a $P$.
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.52\textwidth]{risoluzione.pdf}
+  \includegraphics[width=0.8\textwidth]{risoluzione_sigma.pdf}
+  \caption{Larghezza $\sigma$ della gaussiana (sinistra) e risoluzione relativa
+    $\sigma/\Et$ (destra) in funzione dell'energia vera.}
+  \label{fig:sigma}
+\end{figure}
+
+\clearpage
+\begin{figure}[!t]
+  \centering
+  \includegraphics[width=0.8\textwidth]{risoluzione.pdf}
   \caption{\emph{Pannello centrale:} densità di probabilità $p(\Er\,|\,\Et)$ in scala
     logaritmica. Ogni riga orizzontale è la gaussiana associata a un valore di $\Et$. La
     linea continua indica $\Er=\Et$, le linee tratteggiate $\pm1\sigma(\Et)$.
     \emph{Pannello a destra:} spettro vero in funzione di $\Et$.
     \emph{Pannello in alto:} spettro ricostruito in funzione di $\Er$, ottenuto proiettando
     sull'asse $\Er$ il prodotto fra lo spettro vero e il kernel.}
+  \label{fig:spettri}
 \end{figure}
 
 \noindent
