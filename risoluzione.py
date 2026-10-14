@@ -30,8 +30,7 @@ from matplotlib.colors import LogNorm
 E_MIN, E_MAX = 1.0, 10.0   # intervallo di energia vera [MeV]
 PERIODO = 1.0              # periodo dell'oscillazione vera [MeV]
 AMPIEZZA = 0.8             # ampiezza relativa del seno (0 < A < 1)
-SIGMA_1MEV = 0.005         # risoluzione a 1 MeV  [MeV] -> E_rec ~ E_true
-SIGMA_10MEV = 0.30         # risoluzione a 10 MeV [MeV]
+A_STOC = 0.095             # termine stocastico: sigma/E = A_STOC / sqrt(E [MeV])
 REC_MIN, REC_MAX = E_MIN, E_MAX   # intervallo mostrato in energia ricostruita [MeV]
 
 
@@ -41,8 +40,8 @@ def spettro_vero(E):
 
 
 def sigma(E):
-    """Risoluzione gaussiana in funzione dell'energia vera (crescita lineare)."""
-    return SIGMA_1MEV + (SIGMA_10MEV - SIGMA_1MEV) * (E - E_MIN) / (E_MAX - E_MIN)
+    """Risoluzione gaussiana [MeV]: sigma/E = A_STOC/sqrt(E), cioe' sigma = A_STOC*sqrt(E)."""
+    return A_STOC * np.sqrt(E)
 
 
 def kernel(E_rec, E_true):
@@ -51,34 +50,9 @@ def kernel(E_rec, E_true):
     return np.exp(-0.5 * ((E_rec[None, :] - E_true[:, None]) / s) ** 2) / (np.sqrt(2 * np.pi) * s)
 
 
-def figura_sigma():
-    """Figura con due pannelli: sigma(E) e sigma/E in funzione dell'energia vera."""
-    E = np.linspace(E_MIN, E_MAX, 500)
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(8, 3), constrained_layout=True)
-
-    ax1.plot(E, 1000 * sigma(E), color="tab:green", lw=1.5)
-    ax1.set_xlabel(r"$E_{true}$ [MeV]")
-    ax1.set_ylabel(r"$\sigma$ [keV]")
-    ax1.set_title("Larghezza della gaussiana", fontsize=10)
-
-    ax2.plot(E, 100 * sigma(E) / E, color="tab:purple", lw=1.5)
-    ax2.set_xlabel(r"$E_{true}$ [MeV]")
-    ax2.set_ylabel(r"$\sigma/E_{true}$ [%]")
-    ax2.set_title("Risoluzione relativa", fontsize=10)
-
-    for ax in (ax1, ax2):
-        ax.set_xlim(E_MIN, E_MAX)
-        ax.set_ylim(bottom=0)
-        ax.grid(alpha=0.3)
-
-    for out in ("risoluzione_sigma.png", "risoluzione_sigma.pdf"):
-        fig.savefig(out, dpi=150, bbox_inches="tight")
-        print(f"Figura salvata in {out}")
-
-
 def main():
     E_true = np.linspace(E_MIN, E_MAX, 3000)
-    E_rec = np.linspace(REC_MIN, REC_MAX, 4000)   # passo ~2.5 keV < sigma minima
+    E_rec = np.linspace(REC_MIN, REC_MAX, 4000)   # passo ~2.3 keV << sigma minima
     dE_true = E_true[1] - E_true[0]
 
     K = kernel(E_rec, E_true)
@@ -95,7 +69,7 @@ def main():
 
     # Pannello centrale: kernel p(E_rec | E_true)
     Ks = K[::3]                                   # sottocampionamento in E_true per il disegno
-    pdf_max = 1 / (np.sqrt(2 * np.pi) * SIGMA_1MEV)
+    pdf_max = 1 / (np.sqrt(2 * np.pi) * sigma(E_MIN))
     cmap = plt.get_cmap("viridis").copy()
     cmap.set_bad("white")                         # sfondo bianco dove il kernel e' trascurabile
     mesh = ax_c.pcolormesh(E_rec, E_true[::3], np.ma.masked_less(Ks, 1e-2), cmap=cmap,
@@ -132,16 +106,13 @@ def main():
     cb = fig.colorbar(mesh, cax=ax_cb, orientation="horizontal")
     cb.set_label(r"$p(E_{rec}\,|\,E_{true})$ [MeV$^{-1}$]", fontsize=9)
     cb.ax.tick_params(labelsize=8)
-    testo = (rf"$\sigma$: {SIGMA_1MEV*1000:.0f} keV @ 1 MeV" + "\n"
-             rf"$\sigma$: {SIGMA_10MEV*1000:.0f} keV @ 10 MeV" + "\n"
+    testo = (rf"$\sigma/E = {100*A_STOC:.1f}\%/\sqrt{{E\,[\mathrm{{MeV}}]}}$" + "\n"
              rf"periodo vero = {PERIODO:g} MeV")
     fig.text(0.84, 0.76, testo, ha="center", va="center", fontsize=9)
 
     for out in ("risoluzione.png", "risoluzione.pdf"):
         fig.savefig(out, dpi=150, bbox_inches="tight")
         print(f"Figura salvata in {out}")
-
-    figura_sigma()
 
 
 if __name__ == "__main__":

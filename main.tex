@@ -28,14 +28,22 @@ nell'intervallo $1~\mathrm{MeV} \le \Et \le 10~\mathrm{MeV}$:
   \frac{dN}{d\Et} = 1 + A \sin\!\left(\frac{2\pi \Et}{P}\right),
   \qquad A = 0.8,\quad P = 1~\mathrm{MeV}.
 \end{equation}
-La risoluzione è descritta da un kernel gaussiano centrato sull'energia vera, la cui
-larghezza cresce linearmente con $\Et$, da $5~\mathrm{keV}$ a $1~\mathrm{MeV}$ a
-$300~\mathrm{keV}$ a $10~\mathrm{MeV}$ (figura~\ref{fig:sigma}):
+La risoluzione è descritta da un kernel gaussiano centrato sull'energia vera,
 \begin{equation}
   p(\Er \,|\, \Et) = \frac{1}{\sqrt{2\pi}\,\sigma(\Et)}
-  \exp\!\left[-\frac{(\Er-\Et)^2}{2\,\sigma^2(\Et)}\right].
+  \exp\!\left[-\frac{(\Er-\Et)^2}{2\,\sigma^2(\Et)}\right],
 \end{equation}
-Lo spettro ricostruito si ottiene con l'integrale di convoluzione a kernel variabile
+la cui larghezza segue l'andamento tipico di un calorimetro dominato dalle fluttuazioni
+statistiche:
+\begin{equation}
+  \frac{\sigma(\Et)}{\Et} = \frac{9.5\%}{\sqrt{\Et/\mathrm{MeV}}}
+  \quad\Longrightarrow\quad
+  \sigma(\Et) = 95~\mathrm{keV}\,\sqrt{\Et/\mathrm{MeV}} ,
+\end{equation}
+cioè $\sigma = 95~\mathrm{keV}$ a $1~\mathrm{MeV}$ e $\sigma = 300~\mathrm{keV}$ a
+$10~\mathrm{MeV}$. La risoluzione relativa migliora con l'energia, ma quella assoluta
+peggiora. Lo spettro ricostruito si ottiene con l'integrale di convoluzione a kernel
+variabile
 \begin{equation}
   \frac{dN}{d\Er} = \int_{1\,\mathrm{MeV}}^{10\,\mathrm{MeV}}
   \frac{dN}{d\Et}\; p(\Er \,|\, \Et)\; d\Et ,
@@ -46,16 +54,7 @@ $\sigma$ è grande rispetto a $P$.
 
 \begin{figure}[!htb]
   \centering
-  \includegraphics[width=0.8\textwidth]{risoluzione_sigma.pdf}
-  \caption{Larghezza $\sigma$ della gaussiana (sinistra) e risoluzione relativa
-    $\sigma/\Et$ (destra) in funzione dell'energia vera.}
-  \label{fig:sigma}
-\end{figure}
-
-\clearpage
-\begin{figure}[!t]
-  \centering
-  \includegraphics[width=0.8\textwidth]{risoluzione.pdf}
+  \includegraphics[width=0.55\textwidth]{risoluzione.pdf}
   \caption{\emph{Pannello centrale:} densità di probabilità $p(\Er\,|\,\Et)$ in scala
     logaritmica. Ogni riga orizzontale è la gaussiana associata a un valore di $\Et$. La
     linea continua indica $\Er=\Et$, le linee tratteggiate $\pm1\sigma(\Et)$.
@@ -66,13 +65,14 @@ $\sigma$ è grande rispetto a $P$.
 \end{figure}
 
 \noindent
-\textbf{Lettura del grafico.} A bassa energia il kernel è molto stretto ($\Er\simeq\Et$) e
-lo spettro ricostruito riproduce quello vero. Salendo in energia la banda del kernel si
-allarga: ogni valore di $\Er$ riceve contributi da un intervallo di $\Et$ che contiene
+\textbf{Lettura del grafico.} A bassa energia il kernel è stretto rispetto al periodo e
+lo spettro ricostruito riproduce quasi fedelmente quello vero. Salendo in energia la banda
+del kernel si allarga: ogni valore di $\Er$ riceve contributi da un intervallo di $\Et$ che contiene
 massimi e minimi vicini. Picchi e valli si mediano parzialmente, quindi l'ampiezza
 dell'oscillazione diminuisce progressivamente mentre la posizione dei massimi, e quindi il
-periodo, resta invariata. Vicino a $\Er = 10~\mathrm{MeV}$ lo spettro ricostruito cala
-perché gli eventi migrano oltre l'estremo dell'intervallo e mancano eventi con
-$\Et > 10~\mathrm{MeV}$ che possano compensarli (effetto di bordo).
+periodo, resta invariata. Vicino agli estremi $\Er = 1~\mathrm{MeV}$ e
+$\Er = 10~\mathrm{MeV}$ lo spettro ricostruito cala perché gli eventi migrano fuori
+dall'intervallo e mancano eventi con $\Et$ esterna all'intervallo che possano compensarli
+(effetto di bordo).
 
 \end{document}
