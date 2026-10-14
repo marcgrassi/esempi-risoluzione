@@ -22,11 +22,11 @@
 
 \noindent
 Sia $\Et$ l'energia depositata da una particella nel rivelatore e $\Er$ l'energia
-ricostruita. Come spettro vero si assume una costante più un'oscillazione di periodo $P$,
+ricostruita. Come spettro vero si assume una costante più un'oscillazione di periodo $\Delta$,
 nell'intervallo $1~\mathrm{MeV} \le \Et \le 10~\mathrm{MeV}$:
 \begin{equation}
-  \frac{dN}{d\Et} = 1 + A \sin\!\left(\frac{2\pi \Et}{P}\right),
-  \qquad A = 0.8,\quad P = 1~\mathrm{MeV}.
+  \frac{dN}{d\Et} = 1 + A \sin\!\left(\frac{2\pi \Et}{\Delta}\right),
+  \qquad A = 0.8,\quad \Delta = 1~\mathrm{MeV}.
 \end{equation}
 La risoluzione è descritta da un kernel gaussiano centrato sull'energia vera,
 \begin{equation}
@@ -50,7 +50,7 @@ variabile
 \end{equation}
 che nella figura~\ref{fig:spettri} è calcolato numericamente. La risoluzione \emph{non
 modifica il periodo} dell'oscillazione, ma ne riduce l'ampiezza, tanto più quanto più
-$\sigma$ è grande rispetto a $P$.
+$\sigma$ è grande rispetto a $\Delta$.
 
 \begin{figure}[!htb]
   \centering
